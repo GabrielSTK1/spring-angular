@@ -17,16 +17,30 @@ public class PessoaService {
 	
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
 	
+		buscarPessoaPeloCodigo(codigo);
+		
+		pessoa.setCodigo(codigo);
+		return pessoaRepository.save(pessoa);
+			
+	}
+
+	public void atualizarPropriedadeAtivo(Long codigo, boolean ativo) {
+	
+		Optional<Pessoa> pessoaSalva = buscarPessoaPeloCodigo(codigo);
+		
+		Pessoa pessoa = pessoaSalva.get();
+		pessoa.setAtivo(ativo);
+		
+		pessoaRepository.save(pessoa);
+		
+	}
+	
+	private Optional<Pessoa> buscarPessoaPeloCodigo(Long codigo) {
 		Optional<Pessoa> pessoaSalva = pessoaRepository.findById(codigo);
 		if(!pessoaSalva.isPresent()) {
 			throw new EmptyResultDataAccessException(1);
 		}
-		
-		pessoa.setCodigo(codigo);
-		return pessoaRepository.save(pessoa);
-		
-	
-		
+		return pessoaSalva;
 	}
 	
 }
